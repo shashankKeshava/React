@@ -26,6 +26,33 @@ function App() {
     );
 }
 
+//Handling Events
+class Toggle extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { isToggleOn: true };
+        //Binding necessary for Callbacks
+        //this.handleClick binded with ????
+        //this.handleClick = this.handleClick.bind(this);
+
+    }
+
+    handleClick = () => {
+        this.setState(prevState => ({
+            isToggleOn: !prevState.isToggleOn
+        }));
+    }
+
+    render() {
+        return (
+            <button onClick={this.handleClick}>
+	{this.state.isToggleOn?'ON':'OFF'}
+	</button>
+        )
+    }
+
+}
+
 
 // Components in Class 
 class Clock extends React.Component {
@@ -55,6 +82,6 @@ class Clock extends React.Component {
 
 const element = <Welcome name="shashank"/>;
 ReactDOM.render(
-    <Clock/>,
+    <Toggle/>,
     document.getElementById('root')
 );

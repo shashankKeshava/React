@@ -1,2 +1,3 @@
 Auto Re-Rendering of in react happens only due dom changes? Or is there a task runner engine?
 How to manage asynchronous state updates?
+super(props)?
