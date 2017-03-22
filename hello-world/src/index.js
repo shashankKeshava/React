@@ -139,7 +139,29 @@ function Greeting(props) {
     return (isLoggedIn ? <UserGreeting/> : <GuestGreeting/>);
 }
 
+//Prevent Component From Rendering
+function WarningBanner(props) {
+    if (!props.warn) return null;
+    return (<div className="warning">Warning!</div>);
+}
+
+class Page extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { showWarning: true };
+    }
+    handleToggleClick = () => {
+        this.setState(prevState => ({ showWarning: !prevState.showWarning }));
+    }
+    render() {
+        return (<div>
+                <WarningBanner warn={this.state.showWarning}/>
+                <button onClick={this.handleToggleClick}>{this.state.showWarning?'Hide':'Show'}</button>
+                </div>);
+    }
+}
+
 const element = <Welcome name="shashank"/>;
-ReactDOM.render(<MailBox unreadMessages={messages}/>,
+ReactDOM.render(<Page/>,
     document.getElementById('root')
 );
