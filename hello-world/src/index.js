@@ -161,7 +161,44 @@ class Page extends React.Component {
     }
 }
 
+//Lists and Keys
+const numbers = [2, 6, 8, 22, 21, 56];
+const doubled = numbers.map((number) => number * 2);
+const listItem = numbers.map((number) => <li>{number * 2}</li>);
+
+function ListItem(props) {
+    return (<li>{props.value}</li>);
+}
+
+
+function NumberList(props) {
+    const number = props.numbers;
+    const listItem = numbers.map((number) => <ListItem key={number.toString()} value={number * 2}/>);
+    return (<ul>{ listItem }</ul>);
+
+}
+
+function Blog(props) {
+    const sidebar = (
+        <ul>{props.posts.map((post)=>
+        <li key={post.id}>{post.title}</li>
+        )}</ul>
+    );
+    const content = props.posts.map((post) =>
+        <div key={post.id}>
+        <h3>{post.title}</h3>
+        <p>{post.content}</p>
+        </div>
+    );
+    return (<div>{sidebar}<hr/>{content}</div>)
+}
+
+const posts = [
+    { id: 1, title: 'Hello World', content: 'Welcome to learning React!' },
+    { id: 2, title: 'Installation', content: 'You can install React from npm.' }
+];
+
 const element = <Welcome name="shashank"/>;
-ReactDOM.render(<Page/>,
+ReactDOM.render(<Blog posts={posts}/>,
     document.getElementById('root')
 );
