@@ -46,8 +46,8 @@ class Toggle extends React.Component {
     render() {
         return (
             <button onClick={this.handleClick}>
-	{this.state.isToggleOn?'ON':'OFF'}
-	</button>
+    {this.state.isToggleOn?'ON':'OFF'}
+    </button>
         )
     }
 
@@ -74,14 +74,72 @@ class Clock extends React.Component {
     }
     render() {
         return (<div>
-        		<h1>Hello World</h1>
-        		<h2>It is {this.state.date.toLocaleTimeString()}</h2>
-        	</div>)
+                <h1>Hello World</h1>
+                <h2>It is {this.state.date.toLocaleTimeString()}</h2>
+            </div>)
     }
 }
 
+//Element Variables Handling Stateful Components
+function LoginButton(props) {
+    return (
+        <button onClick={props.onClick}>
+        Login</button>
+    );
+}
+
+function LogoutButton(props) {
+    return (<button onClick={props.onClick}>Logout</button>);
+
+}
+
+class LoginControl extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { isLoggedIn: false };
+    }
+
+    handleLoginClick = () => {
+        this.setState({ isLoggedIn: true });
+    }
+
+    handleLogoutClick = () => {
+        this.setState({ isLoggedIn: false });
+    }
+
+    render() {
+        const isLoggedIn = this.state.isLoggedIn;
+        let button = null;
+        button = isLoggedIn ? <LogoutButton onClick={this.handleLogoutClick}/> : <LoginButton onClick={this.handleLoginClick}/>;
+        return (
+            <div><Greeting isLoggedIn={isLoggedIn}/>{button}</div>
+        );
+    }
+}
+
+//Inline IF and logical && operator
+function MailBox(props) {
+    const unreadMessages = props.unreadMessages;
+    return (<div><h1>Hello</h1>{unreadMessages.length>0 && <h2>You have {unreadMessages.length} unread messages.</h2>}</div>);
+}
+
+const messages = ['React', 'Re:React', 'Re:Re:React'];
+
+//Conditional Rendering
+function UserGreeting(props) {
+    return <h1>Welcome Back!</h1>
+}
+
+function GuestGreeting(props) {
+    return <h1>Please Sign Up</h1>
+}
+
+function Greeting(props) {
+    const isLoggedIn = props.isLoggedIn;
+    return (isLoggedIn ? <UserGreeting/> : <GuestGreeting/>);
+}
+
 const element = <Welcome name="shashank"/>;
-ReactDOM.render(
-    <Toggle/>,
+ReactDOM.render(<MailBox unreadMessages={messages}/>,
     document.getElementById('root')
 );
