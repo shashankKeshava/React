@@ -198,7 +198,91 @@ const posts = [
     { id: 2, title: 'Installation', content: 'You can install React from npm.' }
 ];
 
+//Forms
+class NameForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: '' };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({ value: event.target.value });
+    }
+
+    handleSubmit(event) {
+        alert('A name was submitted: ' + this.state.value);
+        event.preventDefault();
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+        );
+    }
+}
+
+class FlavourForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = ({ value: 'Coconut' });
+    }
+    handleChange = (event) => {
+        this.setState({ value: event.target.value });
+    }
+    handleSubmit = (event) => {
+        alert(`Your Favorite is:${this.state.value}`);
+        event.preventDefault();
+    }
+    render() {
+        return (<form onSubmit={this.handleSubmit}>
+    <label>
+    Pick Your Favorite Icecream Flavour:
+    <select value={this.state.value} onChange={this.handleChange}>
+    <option value="grape">Grape</option>
+    <option value="mango">Mango</option>
+    <option value="apple">Apple</option>
+    <option value="orange">Orange</option>
+    </select></label>
+    <input type="submit" value="Submit"/>
+    </form>)
+    }
+}
+
+//Handling Multiple Inputs
+class Reservation extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isGoing: true,
+            numberOfGuests: 2
+        };
+    }
+    handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+    render() {
+        return (
+            <form><label>Is Going:<input name="isGoing" type="checkbox" checked={this.state.isGoing} onChange={this.handleInputChange}/></label></form>
+        );
+    }
+}
+
 const element = <Welcome name="shashank"/>;
-ReactDOM.render(<Blog posts={posts}/>,
+ReactDOM.render(<Reservation/>,
     document.getElementById('root')
 );
