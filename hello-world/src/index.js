@@ -46,8 +46,8 @@ class Toggle extends React.Component {
     render() {
         return (
             <button onClick={this.handleClick}>
-    {this.state.isToggleOn?'ON':'OFF'}
-    </button>
+            {this.state.isToggleOn?'ON':'OFF'}
+            </button>
         )
     }
 
@@ -74,8 +74,8 @@ class Clock extends React.Component {
     }
     render() {
         return (<div>
-                <h1>Hello World</h1>
-                <h2>It is {this.state.date.toLocaleTimeString()}</h2>
+            <h1>Hello World</h1>
+            <h2>It is {this.state.date.toLocaleTimeString()}</h2>
             </div>)
     }
 }
@@ -155,9 +155,9 @@ class Page extends React.Component {
     }
     render() {
         return (<div>
-                <WarningBanner warn={this.state.showWarning}/>
-                <button onClick={this.handleToggleClick}>{this.state.showWarning?'Hide':'Show'}</button>
-                </div>);
+            <WarningBanner warn={this.state.showWarning}/>
+            <button onClick={this.handleToggleClick}>{this.state.showWarning?'Hide':'Show'}</button>
+            </div>);
     }
 }
 
@@ -181,8 +181,8 @@ function NumberList(props) {
 function Blog(props) {
     const sidebar = (
         <ul>{props.posts.map((post)=>
-        <li key={post.id}>{post.title}</li>
-        )}</ul>
+            <li key={post.id}>{post.title}</li>
+            )}</ul>
     );
     const content = props.posts.map((post) =>
         <div key={post.id}>
@@ -220,12 +220,12 @@ class NameForm extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+            <label>
+            Name:
+            <input type="text" value={this.state.value} onChange={this.handleChange} />
+            </label>
+            <input type="submit" value="Submit" />
+            </form>
         );
     }
 }
@@ -244,16 +244,16 @@ class FlavourForm extends React.Component {
     }
     render() {
         return (<form onSubmit={this.handleSubmit}>
-    <label>
-    Pick Your Favorite Icecream Flavour:
-    <select value={this.state.value} onChange={this.handleChange}>
-    <option value="grape">Grape</option>
-    <option value="mango">Mango</option>
-    <option value="apple">Apple</option>
-    <option value="orange">Orange</option>
-    </select></label>
-    <input type="submit" value="Submit"/>
-    </form>)
+            <label>
+            Pick Your Favorite Icecream Flavour:
+            <select value={this.state.value} onChange={this.handleChange}>
+            <option value="grape">Grape</option>
+            <option value="mango">Mango</option>
+            <option value="apple">Apple</option>
+            <option value="orange">Orange</option>
+            </select></label>
+            <input type="submit" value="Submit"/>
+            </form>)
     }
 }
 
@@ -282,7 +282,58 @@ class Reservation extends React.Component {
     }
 }
 
+//Lifting States
+function BoilingVerdict(props) {
+    return props.celsius >= 100 ? <p>The water will boil</p> : <p>The water will not boil</p>;
+
+}
+
+const scaleName = {
+    c: 'Celsius',
+    f: 'Farhenheit'
+}
+
+//Conversions of C and F 
+function toCelsius(farhenheit) {
+    return (farhenheit - 32) * 5 / 9;
+}
+
+function toFarenheit(celsius) {
+    return (celsius * 9 / 5) + 32;
+}
+
+class Calculator extends React.Component {
+    render() {
+        return (
+            <div>
+            <TemperatureInput scale="c"/>
+            <TemperatureInput scale="f"/>
+            </div>
+        )
+    }
+}
+
+class TemperatureInput extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { temperature: '' };
+    }
+    handleChange = (e) => {
+        this.setState({ temperature: e.target.value });
+    }
+    render() {
+        const temperature = this.state.temperature;
+        const scale = this.props.scale;
+        return (
+            <fieldset>
+            <legend>Enter Temperature in {scaleName[scale]}:</legend>
+            <input value={temperature} onChange={this.handleChange}/>
+            </fieldset>
+        )
+    }
+}
+
 const element = <Welcome name="shashank"/>;
-ReactDOM.render(<Reservation/>,
+ReactDOM.render(<Calculator/>,
     document.getElementById('root')
 );
