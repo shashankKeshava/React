@@ -302,12 +302,36 @@ function toFarenheit(celsius) {
     return (celsius * 9 / 5) + 32;
 }
 
+function tryConvert(temperature, convert) {
+    const input = parseFloat(temperature);
+    if (Number.isNaN(input))
+        return '';
+    const output = convert(input);
+    const rounded = Math.round(output * 1000) / 1000;
+    return rounded.toString();
+}
+
 class Calculator extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { temperature: '', scale: 'c' };
+    }
+    handleCelsiusChange = (temperature) => {
+        this.setState({ scale: 'c', temperature });
+    }
+    handleFarhenheitChange = (temperature) => {
+        this.setState({ scale: 'f', temperature })
+    }
     render() {
+        const temperature = this.state.temperature;
+        const scale = this.state.scale;
+        const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+        const farhenheit = scale === 'c' ? tryConvert(temperature, toFarenheit) : temperature;
         return (
             <div>
-            <TemperatureInput scale="c"/>
-            <TemperatureInput scale="f"/>
+            <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange}/>
+            <TemperatureInput scale="f" temperature={farhenheit} onTemperatureChange={this.handleFarhenheitChange}/>
+            <BoilingVerdict celsius={parseFloat(celsius)}/>
             </div>
         )
     }
@@ -319,10 +343,12 @@ class TemperatureInput extends React.Component {
         this.state = { temperature: '' };
     }
     handleChange = (e) => {
-        this.setState({ temperature: e.target.value });
+        //this.setState({ temperature: e.target.value });
+        this.props.onTemperatureChange(e.target.value);
     }
     render() {
-        const temperature = this.state.temperature;
+        //const temperature = this.state.temperature;
+        const temperature = this.props.temperature;
         const scale = this.props.scale;
         return (
             <fieldset>
@@ -333,14 +359,6 @@ class TemperatureInput extends React.Component {
     }
 }
 
-function tryConvert(temperature, convert) {
-    const input = parseFloat(temperature);
-    if (Number.isNaN(input))
-        return '';
-    const output = convert(input);
-    const rounded = Math.round(output * 1000) / 1000;
-    return rounded.toString();
-}
 
 const element = <Welcome name="shashank"/>;
 ReactDOM.render(<Calculator/>,
