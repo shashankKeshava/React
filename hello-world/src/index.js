@@ -365,8 +365,8 @@ class TemperatureInput extends React.Component {
 function FancyBorder(props) {
     return (
         <div className={'FancyBorder FancyBorder-' + props.color}>
-      {props.children}
-    </div>
+        {props.children}
+        </div>
     );
 }
 
@@ -407,7 +407,64 @@ class SignUpDialog extends React.Component {
 
 }
 
+var PRODUCTS = [
+    { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
+    { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
+    { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
+    { category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch' },
+    { category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5' },
+    { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' }
+];
+
+
+//Thinking in React
+class FilterableProductTable extends React.Component {
+    render() {
+        return (
+            <div>
+            <SearchBar/>
+            <ProductTable products={this.props.products}/>
+            </div>
+        )
+    }
+}
+
+//Search Bar
+class SearchBar extends React.Component {
+    render() {
+        return (
+            <div>
+            <input type="text" placeholder="Search.."/> <br/>
+            <input type="checkbox" /> <label>Only show products in stock</label>
+            </div>
+        )
+    }
+}
+
+class ProductTable extends React.Component {
+    render() {
+        return <ProductCategoryRow category={this.props.products}/>
+    }
+}
+
+class ProductCategoryRow extends React.Component {
+    render() {
+        return <ProductRow product={this.props.category}/>
+    }
+}
+
+class ProductRow extends React.Component {
+    render() {
+        return (
+            <div>
+            
+            Hello
+            </div>
+        )
+    }
+}
+
 const element = <Welcome name="shashank"/>;
-ReactDOM.render(<SignUpDialog/>,
+ReactDOM.render(<FilterableProductTable products={PRODUCTS}/>,
     document.getElementById('root')
 );
