@@ -406,8 +406,10 @@ class SignUpDialog extends React.Component {
     }
 
 }
+const element = <Welcome name="shashank"/>;
 
-var PRODUCTS = [
+//Thinking in React
+const PRODUCTS = [
     { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
     { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
     { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
@@ -417,27 +419,57 @@ var PRODUCTS = [
 ];
 
 
-//Thinking in React
 class FilterableProductTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            filterText: '',
+            inStockOnly: false
+        }
+
+    }
+
+    handleFilterTextInput = (filterText) => {
+        this.setState({
+            filterText: filterText
+        })
+    }
+    handleInStockInput = (inStockOnly) => {
+        this.setState({
+            inStockOnly: inStockOnly
+        })
+    }
+
     render() {
         return (
             <div>
-            <SearchBar/>
-            <ProductTable products={this.props.products}/>
+            <SearchBar filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} onFilterTextInput={this.handleFilterTextInput} onInStockInput={this.handleInStockInput}/>
+            <ProductTable products={this.props.products} filterText={this.state.filterText} inStockOnly={this.state.inStockOnly}/>
             </div>
         )
     }
 }
 
+
 //Search Bar
 class SearchBar extends React.Component {
+    constructor(props) {
+        super(props);
+
+    }
+    handleFilterTextInputChange = (e) => {
+        this.props.onFilterTextInput(e.target.value);
+    }
+    handleInStockInputChange = (e) => {
+        this.props.onInStockInput(e.target.checked);
+    }
     render() {
         return (
-            <div>
-            <input type="text" placeholder="Search.."/> <br/>
-            <input type="checkbox" /> <label>Only show products in stock</label>
-            </div>
-        )
+            <form>
+            <input type="text" placeholder="Search.." value={this.props.filterText} onChange={this.handleFilterTextInputChange}/> <br/>
+            <p><input type="checkbox" checked={this.props.inStockOnly} onChange={this.handleInStockInputChange}/>{' '}<label>Only show products in stock</label></p>
+            </form>)
+
     }
 }
 
@@ -446,12 +478,15 @@ class ProductTable extends React.Component {
         let rows = [];
         let lastCategory = null;
         this.props.products.forEach((product) => {
-            if (product.category != lastCategory) {
+            if (product.name.indexOf(this.props.filterText) === -1 || (!product.stocked && this.props.inStockOnly)) {
+                return;
+            }
+            if (product.category !== lastCategory) {
                 rows.push(<ProductCategoryRow category={product.category} key={product.category}/>);
-                rows.push(<ProductRow product={product} key={product.name}/>);
-                lastCategory = product.category;
 
             }
+            rows.push(<ProductRow product={product} key={product.name}/>);
+            lastCategory = product.category;
 
         })
 
@@ -464,22 +499,19 @@ class ProductTable extends React.Component {
             </thead>
             <tbody>{rows}</tbody>
             </table>)
+
     }
 }
 
 class ProductCategoryRow extends React.Component {
     render() {
-        return <tr><th colspan="2">{this.props.category}</th></tr>
+        return <tr><th colSpan="2">{this.props.category}</th></tr>
     }
 }
 
 class ProductRow extends React.Component {
     render() {
-        var name = this.props.product.stocked ?
-            this.props.product.name :
-            <span style={{color: 'red'}}>
-        {this.props.product.name}
-      </span>;
+        var name = this.props.product.stocked ? this.props.product.name : <span style={{color: 'red'}}> {this.props.product.name}</span>;
         return (
             <tr>
         <td>{name}</td>
@@ -489,7 +521,6 @@ class ProductRow extends React.Component {
     }
 }
 
-const element = <Welcome name="shashank"/>;
 ReactDOM.render(<FilterableProductTable products={PRODUCTS}/>,
     document.getElementById('root')
 );
